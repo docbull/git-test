@@ -1,8 +1,10 @@
-let WebSocketServer = require('websocket').server;
-let https = require('https');
-let port = 3000;
+const fs = require('fs');
+const WebSocketServer = require('websocket').server;
+const https = require('https');
+const { getChunkFromIPFS } = require('./ipfs-loader.js');
 
-let fs = require('fs');
+const port = 3000;
+
 let pkey = fs.readFileSync("ssl/rootca.key");
 let pcert = fs.readFileSync("ssl/rootca.crt");
 let serverOptions = {
@@ -16,7 +18,8 @@ let server = https.createServer(
         console.log((new Date()) + ' Received request for ' + request.url);
         response.writeHead(404);
         response.end();
-});
+    }
+);
 
 server.listen(port, function() {
     console.log((new Date()) + ' Server is listening on port '+port);
@@ -29,13 +32,15 @@ let wsServer = new WebSocketServer({
     cert: pcert
 });
 
-// 
-wsServer.on("request", function (req) {
+wsServer.on("request", async function (req) {
     var conn = req.accept();
     console.log(`New Client: ${conn.remoteAddress}`);
 
-    conn.on('message', function(message) {
-        conn.sendUTF(message.utf8Data);
-        console.log(message.utf8Data);
+    conn.on('message', async function(message) {
+        let args = [
+            'get', `${message.utf8Data}`
+        ]
+        let chunkData = await getChunkFromIPFS('ipfs', args);
+        conn.send(chunkData);
     });
 });
