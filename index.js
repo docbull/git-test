@@ -1,7 +1,7 @@
 const fs = require('fs');
 const WebSocketServer = require('websocket').server;
 const https = require('https');
-const { getChunkFromIPFS } = require('./ipfs-loader.js');
+const { getChunkFromIPFS, catChunkFromIPFS } = require('./ipfs-loader.js');
 
 const port = 3000;
 
@@ -37,10 +37,15 @@ wsServer.on("request", async function (req) {
     console.log(`New Client: ${conn.remoteAddress}`);
 
     conn.on('message', async function(message) {
+        var start = performance.now();
         let args = [
-            'get', `${message.utf8Data}`
+            // 'get', `${message.utf8Data}`
+            'cat', `${message.utf8Data}`
         ]
-        let chunkData = await getChunkFromIPFS('ipfs', args);
+        // let chunkData = await getChunkFromIPFS('ipfs', args);
+        let chunkData = await catChunkFromIPFS('ipfs', args);
         conn.send(chunkData);
+        var end = performance.now();
+        console.log('cat delay:', end-start);
     });
 });
