@@ -25,19 +25,6 @@ async function execac(command, args) {
     })
 }
 
-// async function readChunk(file) {
-//     return new Promise(resolve => {
-//         fs.readFile(`./${file}`, (err, data) => {
-//             if (err) {
-//                 console.error(err);
-//                 return;
-//             }
-//             let units = new Uint8Array(data);
-//             resolve(units);
-//         });
-//     })
-// }
-
 exports.catChunkFromIPFS = async function (command, args) {
     let data = await execac(command, args);
     return new Promise(resolve => {
@@ -51,13 +38,3 @@ exports.catChunkFromIPFS = async function (command, args) {
         resolve(value);
     })
 }
-
-// exports.getChunkFromIPFS = async function (command, args) {
-//     await execac(command, args);
-//     return new Promise(resolve => {
-//         let chunk = args[1].split('/');
-//         readChunk(chunk[1]).then(function(result) {
-//             resolve(result);
-//         });
-//     })
-// }
