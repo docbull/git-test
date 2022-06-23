@@ -1,0 +1,20 @@
+{
+  "name": "websocket",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "execa": "^6.1.0",
+    "fs": "^0.0.1-security",
+    "ipfs-core": "^0.14.3",
+    "js-ipfs": "^0.0.301",
+    "websocket": "^1.0.34",
+    "ws": "^8.6.0"
+  }
+}
